@@ -1,0 +1,181 @@
+---
+title: "Wet Grasland"
+author: "kinmar01"
+editor: visual
+format: 
+  html:           
+    toc: true 
+    toc-depth: 2
+    embed-resources: true
+  pdf:           
+    toc: true 
+    toc-depth: 2
+execute:
+  warning: false
+  message: false
+format-links: false
+number-sections: true
+bibliography: bibliography.bib
+output-file: index
+---
+
+Analysis of the alpha, beta and gamma diversity of wetlands in the Gantrisch region (Switzerland) using vegan [@OksanenEtAl2025]
+
+## setup
+
+```{r}
+pacman::p_load("tidyverse", "vegan")
+
+set.seed(123)
+
+theme_set(
+  theme_minimal()+
+  theme(
+    strip.background = element_rect(fill = "black"),   
+    strip.text = element_text(color = "white"),
+    panel.spacing = unit(0.5, "lines"),
+    axis.text = element_text(color = gray(0.3)),
+    panel.border = element_rect(color = "black",fill=NA)
+  )
+)
+```
+
+## load data
+
+```{r}
+wet_grasland <- read_delim("data/wet_grasland.csv") |> 
+  mutate(
+    Species = factor(Species),
+    across(everything(), ~replace_na(., 0))
+  )
+
+wet_grasland_header <- read_delim("data/wet_grasland_head.csv") |> 
+  mutate(
+    Plot = factor(Plot),
+    Mire_Pair = factor(Mire_Pair),
+    Management = factor(Management),
+    Municipality = factor(Municipality),
+    Date = as.POSIXct(Date, format="%d/%m/%Y")
+  )
+
+wet_grasland |> str()
+wet_grasland_header |> str()
+```
+
+## specnumber, shannon, simpson, ...
+
+```{r}
+wet_grasland_alpha <- wet_grasland |>
+  pivot_longer(-Species, names_to = "Plot", values_to = "Abundance") |> 
+  group_by(Plot) |> 
+  summarise(
+    shannon = diversity(Abundance),
+    simpson = diversity(Abundance, index="simpson"),
+    specnumber = specnumber(Abundance),
+    eveness = shannon/log(specnumber)
+  )
+
+wet_grasland_alpha |> head()
+```
+
+```{r}
+wet_grasland_alpha |> 
+  left_join(
+    wet_grasland_header,
+    join_by(Plot)
+  ) |> 
+  select(
+    shannon,simpson,specnumber,eveness,Management
+  ) |> 
+  pivot_longer(-Management, names_to="index",values_to = "value") |> 
+  ggplot(aes(Management, value,fill=Management)) +
+  geom_boxplot()+
+  geom_jitter(width=0.2)+
+  labs(
+    x="management",
+    y="alpha diversity"
+  ) +
+  facet_wrap(
+    vars(index),
+    ncol=4,
+    scales="free"
+  )
+```
+
+## gamma
+
+```{r}
+wet_grasland_gamma <- wet_grasland |>
+  pivot_longer(-Species, names_to = "Plot", values_to = "Abundance") |> 
+  left_join(
+    wet_grasland_header,
+    join_by(Plot)
+  ) |> 
+  group_by(Management,Species) |> 
+  summarise(present = sum(Abundance)>0,.groups = "drop") |> 
+  group_by(Management) |> 
+  summarise(gamma = sum(present))
+
+wet_grasland_gamma
+```
+
+## beta
+
+```{r}
+wet_grasland_beta <- wet_grasland_alpha |> 
+  left_join(
+    wet_grasland_header,
+    join_by(Plot)
+  ) |> 
+  left_join(
+    wet_grasland_gamma,
+    join_by(Management)
+  ) |> 
+  select(
+    Plot,Management,shannon,simpson,specnumber,eveness,gamma
+  ) |> 
+  mutate(
+    beta = specnumber/gamma
+  )
+
+wet_grasland_beta |> head()
+
+
+```
+
+```{r}
+wet_grasland_beta |> 
+  ggplot(aes(Management, beta,fill=Management)) +
+  geom_boxplot()+
+  geom_jitter(width=0.2)+
+  labs(
+    x="management",
+    y="beta diversity"
+  )
+```
+
+
+
+## References
+
+::: {#refs}
+:::
+
+
+## maybe not further needed
+
+```{r}
+wet_grasland_matrix <- wet_grasland |>
+  pivot_longer(-Species, names_to = "PlotID", values_to = "Abundance") |>
+  pivot_wider(names_from = Species, values_from = Abundance) |>
+  column_to_rownames("PlotID") |>
+  as.matrix()
+
+wet_grasland_alpha <- wet_grasland_matrix |> 
+  diversity()
+
+wet_grasland_specnumber <- wet_grasland_matrix|> 
+  specnumber()
+
+wet_grasland_eveness <- wet_grasland_alpha/log(wet_grasland_specnumber)
+```
