@@ -1,0 +1,38 @@
+---
+title: > 
+  MSc ENR ISM: 
+  Biodiversity analysis (alpha, beta, gamma)
+author: "Marius King"
+date: today
+date-format: long
+format: pdf
+editor: visual
+bibliography: bibliography.bib
+---
+
+## Methods
+
+The vegetation data and associated header data were imported and preprocessed by replacing missing values (NAs) with zeros to indicate the absence of species. Out of the header data, only the assignment of the plots to the management type was used.
+
+Alpha diversity was quantified using species richness (S), the Shannon index (H') [@shannon1949], and Pielou’s evenness  (E) [@pielou1966]. All calculations were performed using the vegan package [@OksanenEtAl2025]. Species richness was computed using the `specnumber()` function, while the Shannon index and Pielou’s evenness were calculated with `diversity()`, based on relative species abundances per plot.
+
+Statistical tests (e.g., ANOVA) were used to evaluate differences in species richness, Shannon index, and Pielou’s evenness between the two management types (grazed vs. mowed).
+
+Gamma diversity was defined as the total number of unique species per management type.
+
+Beta diversity was calculated using the formula $\beta = \gamma / \overline{\alpha}$, where $\gamma$ is the total number of unique species (gamma diversity) and $\overline{\alpha}$ is the average species richness across plots within each management type.
+
+All analyses were conducted using R version 4.5.0 [@RCoreTeam2025].
+
+## Results
+
+A total of 110 species were recorded across all fens, with 96 species found in mowed fens and 86 species in grazed fens.
+In mowed fens, the average number of species per plot was 30.4, ranging from 19 to 41 species. In grazed fens, the average was 30.3 species per plot, with the number of species ranging from 18 to 40.
+ANOVA results indicated no significant differences between the two management types for any of the calculated alpha diversity metrics ([@fig-alpha]).
+
+![Boxplots showing differences in vegetation diversity metrics between grazed and mowed plots. (A) Species richness (number of species), (B) Shannon evenness, and (C) Shannon diversity index. Each point represents an individual plot. p-values from ANOVA tests indicate no significant differences between the two management types.](plot_alpha.jpg){#fig-alpha}
+
+## References
+
+::: {#refs}
+:::
