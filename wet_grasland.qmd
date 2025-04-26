@@ -28,7 +28,7 @@ output-file: index
 ## *setup* {.unnumbered}
 
 ```{r}
-pacman::p_load("tidyverse", "vegan", "patchwork", "ggpubr")
+pacman::p_load("tidyverse", "vegan", "patchwork", "ggpubr", "knitr")
 
 set.seed(123)
 
@@ -117,13 +117,6 @@ wet_grasland_header <- left_join(
   wet_grasland_alpha,
   join_by(Plot)
 ) 
-
-wet_grasland_header |> group_by(Management) |> 
-  summarise(
-    min = min(species_richness),
-    mean = mean(species_richness),
-    max = max(species_richness)
-  )
 ```
 
 ```{r}
@@ -261,12 +254,7 @@ wet_grasland_beta <- wet_grasland_header |>
     beta = gamma/species_richness
   )
 
-wet_grasland_beta |> summary()
-wet_grasland_beta |> 
-  group_by(Management) |> 
-  summarise(
-    beta_mean = first(beta_mean)
-  )
+wet_grasland_beta |> str()
 ```
 
 ```{r}
@@ -298,6 +286,49 @@ plot_beta <- wet_grasland_beta |>
 plot_beta +
   plot_annotation(tag_levels = "A")
 ```
+
+```{r}
+wet_grasland_beta |> summary()
+wet_grasland_beta |> 
+  group_by(Management) |> 
+  summarise(
+    beta_mean = first(beta_mean)
+  )
+
+wet_grasland_beta |> 
+  group_by(Management) |> 
+  summarise(
+    species_richness_min = min(species_richness),
+    species_richness_mean = mean(species_richness),
+    species_richness_max = max(species_richness),
+    species_richness_sd = sd(species_richness),
+    eveness_min = min(eveness),
+    eveness_mean = mean(eveness),
+    eveness_max = max(eveness),
+    eveness_sd = sd(eveness),
+    shannon_min = min(shannon),
+    shannon_mean = mean(shannon),
+    shannon_max = max(shannon),
+    shannon_sd = sd(shannon),
+    gamma = first(gamma),
+    beta_min_plotwise=min(beta),
+    beta_mean_plotwise=mean(beta),
+    beta_max_plotwise=max(beta),
+    beta_sd_plotwise=sd(beta),
+    beta_mean = first(beta_mean)
+  ) |> 
+  pivot_longer(
+    cols = -Management, 
+    names_to = "metric",  
+    values_to = "value" 
+  ) |> 
+  pivot_wider(
+    names_from = Management,
+    values_from = value
+  ) |> 
+  kable(digits = 2)
+```
+
 
 # References {.unnumbered}
 

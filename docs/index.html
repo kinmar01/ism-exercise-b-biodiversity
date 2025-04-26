@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Marius King">
-<meta name="dcterms.date" content="2025-04-25">
+<meta name="dcterms.date" content="2025-04-26">
 
 <title>MSc ENR ISM: Biodiversity analysis (alpha, beta, gamma)</title>
 <style>
@@ -3120,7 +3120,7 @@ vertical-align: -.125em;
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 25, 2025</p>
+        <p class="date">April 26, 2025</p>
       </div>
     </div>
     
@@ -3155,7 +3155,7 @@ vertical-align: -.125em;
 <section id="setup" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="setup"><em>setup</em></h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;vegan&quot;</span>, <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;ggpubr&quot;</span>)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;vegan&quot;</span>, <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;ggpubr&quot;</span>, <span class="st">&quot;knitr&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -3542,36 +3542,22 @@ vertical-align: -.125em;
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  wet_grasland_header,</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  wet_grasland_alpha,</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">join_by</span>(Plot)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>) </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>wet_grasland_header <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Management) <span class="sc">|&gt;</span> </span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">min =</span> <span class="fu">min</span>(species_richness),</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">mean</span>(species_richness),</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">max =</span> <span class="fu">max</span>(species_richness)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 4
-  Management   min  mean   max
-  &lt;fct&gt;      &lt;int&gt; &lt;dbl&gt; &lt;int&gt;
-1 grazing       19  30.4    41
-2 mowing        18  30.3    40</code></pre>
-</div>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(species_richness<span class="sc">~</span>Management, wet_grasland_header) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(species_richness<span class="sc">~</span>Management, wet_grasland_header) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)
 Management   1    0.1    0.11   0.003  0.958
 Residuals   34 1339.9   39.41               </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(eveness<span class="sc">~</span>Management, wet_grasland_header) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(eveness<span class="sc">~</span>Management, wet_grasland_header) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            Df  Sum Sq  Mean Sq F value Pr(&gt;F)
 Management   1 0.00194 0.001938   0.737  0.397
 Residuals   34 0.08945 0.002631               </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(shannon<span class="sc">~</span>Management, wet_grasland_header) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(shannon<span class="sc">~</span>Management, wet_grasland_header) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)
 Management   1 0.0164 0.01641   0.279  0.601
@@ -3579,77 +3565,77 @@ Residuals   34 2.0031 0.05891               </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>plot_specnumber <span class="ot">&lt;-</span> wet_grasland_header <span class="sc">|&gt;</span>  </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Management, species_richness, <span class="at">fill=</span>Management)) <span class="sc">+</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>, </span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;p.format&quot;</span>, </span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.x =</span> <span class="fl">1.25</span>, </span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.y =</span> <span class="dv">15</span><span class="sc">+</span><span class="dv">30</span><span class="sc">*</span><span class="fl">0.95</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">15</span>,<span class="dv">45</span>)</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">values=</span>colors</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">&quot;Species Richness&quot;</span></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>plot_eveness <span class="ot">&lt;-</span> wet_grasland_header <span class="sc">|&gt;</span>  </span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Management, eveness, <span class="at">fill=</span>Management)) <span class="sc">+</span></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>, </span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;p.format&quot;</span>, </span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.x =</span> <span class="fl">1.25</span>, </span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.y =</span> <span class="fl">0.6+0.3</span><span class="sc">*</span><span class="fl">0.95</span></span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits=</span><span class="fu">c</span>(<span class="fl">0.6</span>,<span class="fl">0.9</span>)</span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">values=</span>colors</span>
-<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
-<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">&quot;Pielou&#39;s eveness&quot;</span></span>
-<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
-<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>plot_shannon <span class="ot">&lt;-</span> wet_grasland_header <span class="sc">|&gt;</span>  </span>
-<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Management, shannon, <span class="at">fill=</span>Management)) <span class="sc">+</span></span>
-<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
-<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>, </span>
-<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;p.format&quot;</span>, </span>
-<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.x =</span> <span class="fl">1.25</span>, </span>
-<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.y =</span> <span class="dv">2</span><span class="sc">+</span><span class="dv">1</span><span class="sc">*</span><span class="fl">0.95</span></span>
-<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
-<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)</span>
-<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
-<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">values=</span>colors</span>
-<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb22-61"><a href="#cb22-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb22-62"><a href="#cb22-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
-<span id="cb22-63"><a href="#cb22-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">&quot;Shannon index&quot;</span></span>
-<span id="cb22-64"><a href="#cb22-64" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb22-65"><a href="#cb22-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-66"><a href="#cb22-66" aria-hidden="true" tabindex="-1"></a>plot_alpha <span class="ot">&lt;-</span> plot_specnumber <span class="sc">+</span></span>
-<span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a>  plot_eveness <span class="sc">+</span></span>
-<span id="cb22-68"><a href="#cb22-68" aria-hidden="true" tabindex="-1"></a>  plot_shannon<span class="sc">+</span></span>
-<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&quot;A&quot;</span>)</span>
-<span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a>plot_alpha</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plot_specnumber <span class="ot">&lt;-</span> wet_grasland_header <span class="sc">|&gt;</span>  </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Management, species_richness, <span class="at">fill=</span>Management)) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>, </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;p.format&quot;</span>, </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.x =</span> <span class="fl">1.25</span>, </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.y =</span> <span class="dv">15</span><span class="sc">+</span><span class="dv">30</span><span class="sc">*</span><span class="fl">0.95</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">15</span>,<span class="dv">45</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">values=</span>colors</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">&quot;Species Richness&quot;</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>plot_eveness <span class="ot">&lt;-</span> wet_grasland_header <span class="sc">|&gt;</span>  </span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Management, eveness, <span class="at">fill=</span>Management)) <span class="sc">+</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>, </span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;p.format&quot;</span>, </span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.x =</span> <span class="fl">1.25</span>, </span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.y =</span> <span class="fl">0.6+0.3</span><span class="sc">*</span><span class="fl">0.95</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits=</span><span class="fu">c</span>(<span class="fl">0.6</span>,<span class="fl">0.9</span>)</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">values=</span>colors</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">&quot;Pielou&#39;s eveness&quot;</span></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>plot_shannon <span class="ot">&lt;-</span> wet_grasland_header <span class="sc">|&gt;</span>  </span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Management, shannon, <span class="at">fill=</span>Management)) <span class="sc">+</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>, </span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;p.format&quot;</span>, </span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.x =</span> <span class="fl">1.25</span>, </span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.y =</span> <span class="dv">2</span><span class="sc">+</span><span class="dv">1</span><span class="sc">*</span><span class="fl">0.95</span></span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">values=</span>colors</span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">&quot;Shannon index&quot;</span></span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>plot_alpha <span class="ot">&lt;-</span> plot_specnumber <span class="sc">+</span></span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>  plot_eveness <span class="sc">+</span></span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>  plot_shannon<span class="sc">+</span></span>
+<span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&quot;A&quot;</span>)</span>
+<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a>plot_alpha</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3657,32 +3643,32 @@ Residuals   34 2.0031 0.05891               </code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;plot_alpha.jpg&quot;</span>,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot=</span>plot_alpha,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">24</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">height=</span><span class="dv">12</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">units =</span> <span class="st">&quot;cm&quot;</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;plot_alpha.jpg&quot;</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot=</span>plot_alpha,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">24</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">height=</span><span class="dv">12</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">units =</span> <span class="st">&quot;cm&quot;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>(e)</strong> Calculate the observed gamma diversity separatly for both managements types (grazed, mowed)</p>
 <p><strong>(f)</strong> Calculate the mean beta diversity separately for both management types (grazed, mowed)</p>
 <p><strong>(g)</strong> Calculate the (plot-wise) beta diversity separately for both managements types (grazed, mowed)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_gamma <span class="ot">&lt;-</span> wet_grasland <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>Species, <span class="at">names_to =</span> <span class="st">&quot;Plot&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;Abundance&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    wet_grasland_header,</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">join_by</span>(Plot)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management,Species) <span class="sc">|&gt;</span> </span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">present =</span> <span class="fu">sum</span>(Abundance)<span class="sc">&gt;</span><span class="dv">0</span>,</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management) <span class="sc">|&gt;</span> </span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">gamma =</span> <span class="fu">sum</span>(present))</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>wet_grasland_gamma <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_gamma <span class="ot">&lt;-</span> wet_grasland <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>Species, <span class="at">names_to =</span> <span class="st">&quot;Plot&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;Abundance&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    wet_grasland_header,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">join_by</span>(Plot)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management,Species) <span class="sc">|&gt;</span> </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">present =</span> <span class="fu">sum</span>(Abundance)<span class="sc">&gt;</span><span class="dv">0</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management) <span class="sc">|&gt;</span> </span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">gamma =</span> <span class="fu">sum</span>(present))</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>wet_grasland_gamma <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>tibble [2 × 2] (S3: tbl_df/tbl/data.frame)
  $ Management: Factor w/ 2 levels &quot;grazing&quot;,&quot;mowing&quot;: 1 2
@@ -3690,28 +3676,91 @@ Residuals   34 2.0031 0.05891               </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_header <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  wet_grasland_header,</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  wet_grasland_gamma,</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">join_by</span>(Management)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_header <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  wet_grasland_header,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  wet_grasland_gamma,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">join_by</span>(Management)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_beta <span class="ot">&lt;-</span> wet_grasland_header <span class="sc">|&gt;</span> </span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    Plot,Management,shannon,species_richness,eveness,gamma</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management) <span class="sc">|&gt;</span> </span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_species_richness =</span> species_richness <span class="sc">|&gt;</span> <span class="fu">mean</span>(),</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_mean =</span> gamma<span class="sc">/</span>mean_species_richness,</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta =</span> gamma<span class="sc">/</span>species_richness</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>wet_grasland_beta <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_beta <span class="ot">&lt;-</span> wet_grasland_header <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    Plot,Management,shannon,species_richness,eveness,gamma</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management) <span class="sc">|&gt;</span> </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_species_richness =</span> species_richness <span class="sc">|&gt;</span> <span class="fu">mean</span>(),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_mean =</span> gamma<span class="sc">/</span>mean_species_richness,</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta =</span> gamma<span class="sc">/</span>species_richness</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>wet_grasland_beta <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>gropd_df [36 × 10] (S3: grouped_df/tbl_df/tbl/data.frame)
+ $ Plot                 : chr [1:36] &quot;P111&quot; &quot;P112&quot; &quot;P121&quot; &quot;P122&quot; ...
+ $ Management           : Factor w/ 2 levels &quot;grazing&quot;,&quot;mowing&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+ $ shannon              : num [1:36] 2.68 2.36 2.69 2.43 2.52 ...
+ $ species_richness     : int [1:36] 22 27 22 35 31 36 35 39 28 21 ...
+ $ eveness              : num [1:36] 0.866 0.715 0.871 0.684 0.733 ...
+ $ gamma                : int [1:36] 96 96 96 96 96 96 96 96 96 96 ...
+ $ mean_species_richness: num [1:36] 30.4 30.4 30.4 30.4 30.4 ...
+ $ .groups              : chr [1:36] &quot;drop&quot; &quot;drop&quot; &quot;drop&quot; &quot;drop&quot; ...
+ $ beta_mean            : num [1:36] 3.16 3.16 3.16 3.16 3.16 ...
+ $ beta                 : num [1:36] 4.36 3.56 4.36 2.74 3.1 ...
+ - attr(*, &quot;groups&quot;)= tibble [2 × 2] (S3: tbl_df/tbl/data.frame)
+  ..$ Management: Factor w/ 2 levels &quot;grazing&quot;,&quot;mowing&quot;: 1 2
+  ..$ .rows     : list&lt;int&gt; [1:2] 
+  .. ..$ : int [1:18] 1 2 3 4 5 6 7 8 9 10 ...
+  .. ..$ : int [1:18] 19 20 21 22 23 24 25 26 27 28 ...
+  .. ..@ ptype: int(0) 
+  ..- attr(*, &quot;.drop&quot;)= logi TRUE</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(beta<span class="sc">~</span>Management, wet_grasland_beta) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)
+Management   1  1.216  1.2161   2.274  0.141
+Residuals   34 18.181  0.5347               </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>plot_beta <span class="ot">&lt;-</span> wet_grasland_beta <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Management, beta, <span class="at">fill=</span>Management)) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>, </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;p.format&quot;</span>, </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.x =</span> <span class="fl">1.25</span>, </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.y =</span> <span class="fl">2.1</span><span class="sc">+</span><span class="dv">3</span><span class="sc">*</span><span class="fl">0.95</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits=</span><span class="fu">c</span>(<span class="fl">2.1</span>,<span class="fl">5.1</span>)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">values=</span>colors</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">&quot;Beta diversity&quot;</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>plot_beta <span class="sc">+</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&quot;A&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img role="img" src="data:image/png;base64,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" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_beta <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Plot             Management    shannon      species_richness
  Length:36          grazing:18   Min.   :2.037   Min.   :18.00   
@@ -3735,11 +3784,11 @@ Residuals   34 2.0031 0.05891               </code></pre>
  3rd Qu.:3.159   3rd Qu.:3.431  
  Max.   :3.159   Max.   :5.053  </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_beta <span class="sc">|&gt;</span> </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management) <span class="sc">|&gt;</span> </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_mean =</span> <span class="fu">first</span>(beta_mean)</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_beta <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management) <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_mean =</span> <span class="fu">first</span>(beta_mean)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
   Management beta_mean
@@ -3747,45 +3796,140 @@ Residuals   34 2.0031 0.05891               </code></pre>
 1 grazing         3.16
 2 mowing          2.84</code></pre>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(beta<span class="sc">~</span>Management, wet_grasland_beta) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)
-Management   1  1.216  1.2161   2.274  0.141
-Residuals   34 18.181  0.5347               </code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>plot_beta <span class="ot">&lt;-</span> wet_grasland_beta <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Management, beta, <span class="at">fill=</span>Management)) <span class="sc">+</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;anova&quot;</span>, </span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;p.format&quot;</span>, </span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.x =</span> <span class="fl">1.25</span>, </span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">label.y =</span> <span class="fl">2.1</span><span class="sc">+</span><span class="dv">3</span><span class="sc">*</span><span class="fl">0.95</span></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits=</span><span class="fu">c</span>(<span class="fl">2.1</span>,<span class="fl">5.1</span>)</span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">values=</span>colors</span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">&quot;&quot;</span>,</span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">&quot;Beta diversity&quot;</span></span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>plot_beta <span class="sc">+</span></span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&quot;A&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>wet_grasland_beta <span class="sc">|&gt;</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Management) <span class="sc">|&gt;</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">species_richness_min =</span> <span class="fu">min</span>(species_richness),</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">species_richness_mean =</span> <span class="fu">mean</span>(species_richness),</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">species_richness_max =</span> <span class="fu">max</span>(species_richness),</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">species_richness_sd =</span> <span class="fu">sd</span>(species_richness),</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">eveness_min =</span> <span class="fu">min</span>(eveness),</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">eveness_mean =</span> <span class="fu">mean</span>(eveness),</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">eveness_max =</span> <span class="fu">max</span>(eveness),</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">eveness_sd =</span> <span class="fu">sd</span>(eveness),</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">shannon_min =</span> <span class="fu">min</span>(shannon),</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">shannon_mean =</span> <span class="fu">mean</span>(shannon),</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">shannon_max =</span> <span class="fu">max</span>(shannon),</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">shannon_sd =</span> <span class="fu">sd</span>(shannon),</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">gamma =</span> <span class="fu">first</span>(gamma),</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_min_plotwise=</span><span class="fu">min</span>(beta),</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_mean_plotwise=</span><span class="fu">mean</span>(beta),</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_max_plotwise=</span><span class="fu">max</span>(beta),</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_sd_plotwise=</span><span class="fu">sd</span>(beta),</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_mean =</span> <span class="fu">first</span>(beta_mean)</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span>Management, </span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">&quot;metric&quot;</span>,  </span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span> </span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> Management,</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> value</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img role="img" src="data:image/png;base64,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" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">metric</th>
+<th style="text-align: right;">grazing</th>
+<th style="text-align: right;">mowing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">species_richness_min</td>
+<td style="text-align: right;">19.00</td>
+<td style="text-align: right;">18.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">species_richness_mean</td>
+<td style="text-align: right;">30.39</td>
+<td style="text-align: right;">30.28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">species_richness_max</td>
+<td style="text-align: right;">41.00</td>
+<td style="text-align: right;">40.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">species_richness_sd</td>
+<td style="text-align: right;">6.67</td>
+<td style="text-align: right;">5.86</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">eveness_min</td>
+<td style="text-align: right;">0.68</td>
+<td style="text-align: right;">0.61</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">eveness_mean</td>
+<td style="text-align: right;">0.76</td>
+<td style="text-align: right;">0.74</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">eveness_max</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.84</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">eveness_sd</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.05</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">shannon_min</td>
+<td style="text-align: right;">2.11</td>
+<td style="text-align: right;">2.04</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">shannon_mean</td>
+<td style="text-align: right;">2.56</td>
+<td style="text-align: right;">2.52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">shannon_max</td>
+<td style="text-align: right;">2.93</td>
+<td style="text-align: right;">2.90</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">shannon_sd</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">0.27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gamma</td>
+<td style="text-align: right;">96.00</td>
+<td style="text-align: right;">86.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">beta_min_plotwise</td>
+<td style="text-align: right;">2.34</td>
+<td style="text-align: right;">2.15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">beta_mean_plotwise</td>
+<td style="text-align: right;">3.32</td>
+<td style="text-align: right;">2.95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">beta_max_plotwise</td>
+<td style="text-align: right;">5.05</td>
+<td style="text-align: right;">4.78</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">beta_sd_plotwise</td>
+<td style="text-align: right;">0.80</td>
+<td style="text-align: right;">0.65</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">beta_mean</td>
+<td style="text-align: right;">3.16</td>
+<td style="text-align: right;">2.84</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </section>

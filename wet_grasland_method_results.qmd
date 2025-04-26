@@ -1,36 +1,43 @@
 ---
-title: > 
-  MSc ENR ISM: 
-  Biodiversity analysis (alpha, beta, gamma)
+title: "MSc ENR ISM: Exercise B"
+subtitle: "Biodiversity analysis (alpha, beta, gamma)"
 author: "Marius King"
 date: today
 date-format: long
-format: pdf
+format: 
+  pdf:
+    geometry:
+      - top=25mm
+      - left=25mm
+      - right=30mm
+      - bottom=30mm
 editor: visual
 bibliography: bibliography.bib
 ---
 
 ## Methods
 
-The vegetation data and associated header data were imported and preprocessed by replacing missing values (NAs) with zeros to indicate the absence of species. Out of the header data, only the assignment of the plots to the management type was used.
+The vegetation data and associated header information were imported and preprocessed. Missing values (NAs) were replaced with zeros to indicate species absence. From the header data, only the assignment of plots to management types was used.
 
-Alpha diversity was quantified using species richness (S), the Shannon index (H') [@shannon1949], and Pielou’s evenness  (E) [@pielou1966]. All calculations were performed using the vegan package [@OksanenEtAl2025]. Species richness was computed using the `specnumber()` function, while the Shannon index and Pielou’s evenness were calculated with `diversity()`, based on relative species abundances per plot.
+Alpha diversity was assessed using species richness (S), the Shannon index (H') [@shannon1949], and Pielou’s evenness (E) [@pielou1966]. All calculations were performed with the vegan package [@OksanenEtAl2025]. Species richness was calculated using the `specnumber()` function, while the Shannon index and Pielou’s evenness were computed using the `diversity()` function, based on relative species abundances per plot.
 
-Statistical tests (e.g., ANOVA) were used to evaluate differences in species richness, Shannon index, and Pielou’s evenness between the two management types (grazed vs. mowed).
+Statistical tests (e.g., ANOVA) were conducted to assess differences in species richness, Shannon index, and Pielou’s evenness between the two management types (grazed vs. mowed).
 
-Gamma diversity was defined as the total number of unique species per management type.
+Overall gamma diversity was calculated as the total number of unique species recorded across all plots, irrespective of management type. Habitat-specific gamma diversity was determined separately for each management type (grazed and mowed fens) by counting the number of unique species recorded within each group.
 
-Beta diversity was calculated using the formula $\beta = \gamma / \overline{\alpha}$, where $\gamma$ is the total number of unique species (gamma diversity) and $\overline{\alpha}$ is the average species richness across plots within each management type.
+Mean beta diversity was calculated according to the formula $\beta = \gamma / \overline{\alpha}$, where $\gamma$ represents the habitat-specific gamma diversity, and $\overline{\alpha}$ denotes the mean species richness across plots within each management type. Plot-wise beta diversity was calculated using the formula $\beta = \gamma / \alpha$.
 
 All analyses were conducted using R version 4.5.0 [@RCoreTeam2025].
 
 ## Results
 
-A total of 110 species were recorded across all fens, with 96 species found in mowed fens and 86 species in grazed fens.
-In mowed fens, the average number of species per plot was 30.4, ranging from 19 to 41 species. In grazed fens, the average was 30.3 species per plot, with the number of species ranging from 18 to 40.
-ANOVA results indicated no significant differences between the two management types for any of the calculated alpha diversity metrics ([@fig-alpha]).
+Gamma diversity across all fens in the study region was 110 species. Habitat-specific gamma diversity was slightly lower, with 96 species recorded in mowed fens and 86 species in grazed fens.
+In mowed fens, the mean species richness per plot was 30.4, ranging from 19 to 41 species. In grazed fens, the mean was 30.3 species per plot, with a range from 18 to 40 species. ANOVA results indicated no significant differences between the two management types for any of the calculated alpha diversity metrics, including species richness, Shannon diversity, and Pielou’s evenness ([@fig-alpha]).
 
 ![Boxplots showing differences in vegetation diversity metrics between grazed and mowed plots. (A) Species richness (number of species), (B) Shannon evenness, and (C) Shannon diversity index. Each point represents an individual plot. p-values from ANOVA tests indicate no significant differences between the two management types.](plot_alpha.jpg){#fig-alpha}
+
+Mean beta diversity differed slightly between the two management types. In mowed fens, mean beta diversity was 2.84, whereas in grazed fens it was slightly higher at 3.16.
+When calculating plot-wise beta diversity, the mean value across plots was 2.95 for mowed fens and 3.32 for grazed fens. The minimum plot-wise beta diversity was 2.15 in mowed and 2.34 in grazed fens, while maximum values reached 4.78 and 5.05, respectively.
 
 ## References
 
