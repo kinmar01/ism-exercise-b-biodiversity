@@ -288,13 +288,6 @@ plot_beta +
 ```
 
 ```{r}
-wet_grasland_beta |> summary()
-wet_grasland_beta |> 
-  group_by(Management) |> 
-  summarise(
-    beta_mean = first(beta_mean)
-  )
-
 wet_grasland_beta |> 
   group_by(Management) |> 
   summarise(
