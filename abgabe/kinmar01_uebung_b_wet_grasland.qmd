@@ -1,0 +1,331 @@
+---
+title: > 
+  MSc ENR ISM: \n
+  Biodiversity analysis (alpha, beta, gamma)
+author: "Marius King"
+date: today
+date-format: long
+abstract: > 
+  Analysis of the alpha, beta and gamma diversity of wetlands in the Gantrisch region (Switzerland) using R v4.5.0 [@RCoreTeam2025] and vegan [@OksanenEtAl2025].
+editor: source
+title-block-banner: true
+format: 
+  html:           
+    toc: true 
+    toc-depth: 2
+    embed-resources: true
+    theme: journal
+execute:
+  warning: false
+  message: false
+format-links: false
+number-sections: true
+shift-heading-level-by: 1
+bibliography: bibliography.bib
+output-file: index
+---
+
+## *setup* {.unnumbered}
+
+```{r}
+pacman::p_load("tidyverse", "vegan", "patchwork", "ggpubr", "knitr")
+
+set.seed(123)
+
+theme_set(
+  theme_minimal()+
+  theme(
+    strip.background = element_rect(fill = "black"),   
+    strip.text = element_text(color = "white"),
+    panel.spacing = unit(0.5, "lines"),
+    axis.text = element_text(color = gray(0.3)),
+    panel.border = element_rect(color = "black",fill=NA)
+  )
+)
+
+colors <- c(
+  "grazing"="#6B8E23",
+  "mowing"="#A8D08D"
+)
+```
+
+# Structure of community ecology data
+
+**(a)** Import the community ecology data (vegetation data) from the file “Wet_Grasland.xlsx”. Tip: Remember that community ecology data consists of species data and header/environmental data. Consider to set the first column (Taxa names resp. Plot names) as rownames
+
+**(b)** Check the data. How is the data structured? Are there NAs?
+
+**(c)** Often in species data, as a convention and for better readability, cells are left empty if a species is not present at a sampling unit (here plot). But for analysis there should be a 0 if a species is not in the plot ► change the NAs to 0 in the Species data.
+
+```{r}
+wet_grasland <- read_delim("data/wet_grasland.csv") 
+
+wet_grasland |> str()
+wet_grasland |> summary()
+  
+wet_grasland <- wet_grasland |> 
+  mutate(
+    Species = factor(Species),
+    across(everything(), ~replace_na(., 0))
+  )
+```
+
+
+```{r}
+wet_grasland_header <- read_delim("data/wet_grasland_head.csv") 
+
+wet_grasland_header |> str()
+wet_grasland_header |> summary() 
+
+wet_grasland_header <- wet_grasland_header|> 
+  mutate(
+    Plot = factor(Plot),
+    Mire_Pair = factor(Mire_Pair),
+    Management = factor(Management),
+    Municipality = factor(Municipality),
+    Date = as.POSIXct(Date, format="%d/%m/%Y")
+  )
+```
+
+# Community diversity
+
+**(a)** For most operations/calculations on the species data we need the sampling units (here plots) as rows and the species as columns ► transpose the species data data frame.
+
+**(b)** Calculate species richness. Hint: Use a base R function or the `specnumber` function of the package `vegan`
+
+**(c)** Use the function `diversity` of the package `vegan` to calculate the Shannon diversity and the Shannon eveness
+
+**(d)** Add the diversity measures calculated in (b) and (c) to the Header/Environmental Data
+
+```{r}
+wet_grasland_alpha <- wet_grasland |>
+  pivot_longer(-Species, names_to = "Plot", values_to = "Abundance") |> 
+  group_by(Plot) |> 
+  summarise(
+    shannon = diversity(Abundance),
+    simpson = diversity(Abundance, index="simpson"),
+    species_richness = specnumber(Abundance),
+    eveness = shannon/log(species_richness)
+  )
+
+wet_grasland_alpha |> str()
+```
+
+```{r}
+wet_grasland_header <- left_join(
+  wet_grasland_header,
+  wet_grasland_alpha,
+  join_by(Plot)
+) 
+```
+
+```{r}
+aov(species_richness~Management, wet_grasland_header) |> summary()
+aov(eveness~Management, wet_grasland_header) |> summary()
+aov(shannon~Management, wet_grasland_header) |> summary()
+```
+
+
+```{r}
+plot_specnumber <- wet_grasland_header |>  
+  ggplot(aes(Management, species_richness, fill=Management)) +
+  geom_boxplot()+
+  geom_jitter(width=0.2)+
+  stat_compare_means(
+    method = "anova", 
+    label = "p.format", 
+    label.x = 1.25, 
+    label.y = 15+30*0.95
+  )+
+  scale_y_continuous(
+    limits=c(15,45)
+  )+
+  scale_fill_manual(
+    values=colors
+  )+
+  labs(
+    x="",
+    y="Species Richness"
+  )+
+  theme(legend.position = "none")
+
+plot_eveness <- wet_grasland_header |>  
+  ggplot(aes(Management, eveness, fill=Management)) +
+  geom_boxplot()+
+  geom_jitter(width=0.2)+
+  stat_compare_means(
+    method = "anova", 
+    label = "p.format", 
+    label.x = 1.25, 
+    label.y = 0.6+0.3*0.95
+  )+
+  scale_y_continuous(
+    limits=c(0.6,0.9)
+  )+
+  scale_fill_manual(
+    values=colors
+  )+
+  labs(
+    x="",
+    y="Pielou's eveness"
+  )+
+  theme(legend.position = "none")
+
+plot_shannon <- wet_grasland_header |>  
+  ggplot(aes(Management, shannon, fill=Management)) +
+  geom_boxplot()+
+  geom_jitter(width=0.2)+
+  stat_compare_means(
+    method = "anova", 
+    label = "p.format", 
+    label.x = 1.25, 
+    label.y = 2+1*0.95
+  )+
+  scale_y_continuous(
+    limits=c(2,3)
+  )+
+  scale_fill_manual(
+    values=colors
+  )+
+  labs(
+    x="",
+    y="Shannon index"
+  )
+
+plot_alpha <- plot_specnumber +
+  plot_eveness +
+  plot_shannon+
+  plot_annotation(tag_levels = "A")
+
+plot_alpha
+
+ggsave(
+  "plot_alpha.jpg",
+  plot=plot_alpha,
+  width=24,
+  height=12,
+  units = "cm"
+)
+```
+
+**(e)** Calculate the observed gamma diversity separatly for both managements types (grazed, mowed)
+
+**(f)** Calculate the mean beta diversity separately for both management types (grazed, mowed)
+
+**(g)** Calculate the (plot-wise) beta diversity separately for both managements types (grazed, mowed)
+
+```{r}
+wet_grasland_gamma <- wet_grasland |>
+  pivot_longer(-Species, names_to = "Plot", values_to = "Abundance") |> 
+  left_join(
+    wet_grasland_header,
+    join_by(Plot)
+  ) |> 
+  group_by(Management,Species) |> 
+  summarise(
+    present = sum(Abundance)>0,
+    .groups = "drop") |> 
+  group_by(Management) |> 
+  summarise(gamma = sum(present))
+
+wet_grasland_gamma |> str()
+```
+
+```{r}
+wet_grasland_header <- left_join(
+  wet_grasland_header,
+  wet_grasland_gamma,
+  join_by(Management)
+) 
+```
+
+```{r}
+wet_grasland_beta <- wet_grasland_header |> 
+  select(
+    Plot,Management,shannon,species_richness,eveness,gamma
+  ) |> 
+  group_by(Management) |> 
+  mutate(
+    mean_species_richness = species_richness |> mean(),
+    .groups = "drop"
+  ) |> 
+  mutate(
+    beta_mean = gamma/mean_species_richness,
+    beta = gamma/species_richness
+  )
+
+wet_grasland_beta |> str()
+```
+
+```{r}
+aov(beta~Management, wet_grasland_beta) |> summary()
+```
+
+```{r}
+plot_beta <- wet_grasland_beta |> 
+  ggplot(aes(Management, beta, fill=Management)) +
+  geom_boxplot()+
+  geom_jitter(width=0.2)+
+  stat_compare_means(
+    method = "anova", 
+    label = "p.format", 
+    label.x = 1.25, 
+    label.y = 2.1+3*0.95
+  )+
+  scale_y_continuous(
+    limits=c(2.1,5.1)
+  )+
+  scale_fill_manual(
+    values=colors
+  )+
+  labs(
+    x="",
+    y="Beta diversity"
+  )
+
+plot_beta +
+  plot_annotation(tag_levels = "A")
+```
+
+```{r}
+wet_grasland_beta |> 
+  group_by(Management) |> 
+  summarise(
+    species_richness_min = min(species_richness),
+    species_richness_mean = mean(species_richness),
+    species_richness_max = max(species_richness),
+    species_richness_sd = sd(species_richness),
+    eveness_min = min(eveness),
+    eveness_mean = mean(eveness),
+    eveness_max = max(eveness),
+    eveness_sd = sd(eveness),
+    shannon_min = min(shannon),
+    shannon_mean = mean(shannon),
+    shannon_max = max(shannon),
+    shannon_sd = sd(shannon),
+    gamma = first(gamma),
+    beta_min_plotwise=min(beta),
+    beta_mean_plotwise=mean(beta),
+    beta_max_plotwise=max(beta),
+    beta_sd_plotwise=sd(beta),
+    beta_mean = first(beta_mean)
+  ) |> 
+  pivot_longer(
+    cols = -Management, 
+    names_to = "metric",  
+    values_to = "value" 
+  ) |> 
+  pivot_wider(
+    names_from = Management,
+    values_from = value
+  ) |> 
+  kable(digits = 2)
+```
+
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
+
+
